@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepet</title>
+    <style>
+        /* Temel stil ayarları */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header stil ayarları */
+        header {
+         background-color: rgba(0, 0, 0, 0.5); /* Siyah renk, %50 saydamlık */
+         color: #fff; /* Yazı rengi */
+         padding: 10px;
+         text-align: center;
+}
+
+
+        /* Menü stil ayarları */
+        nav {
+            background-color: #444;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* İçerik stil ayarları */
+        main {
+            flex: 1;
+            text-align: center;
+            background-color: #000; /* Arka plan rengi */
+            color: #fff; /* Yazı rengi */
+            padding: 20px;
+        }
+
+        /* Sepet içeriği stil ayarları */
+        .cart-content {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .cart-item {
+            background-color: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-item img {
+            max-width: 100px;
+            max-height: 80px;
+            margin-right: 10px;
+        }
+
+        /* Footer stil ayarları */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <body>
+
+        <header>
+            <h1>Sepet</h1>
+        </header>
+    
+        <nav>
+            <a href="Untitled-1.html">Anasayfa</a>
+            <a href="Ürünler.html">Ürünler</a>    
+            <a href="#">İletişim</a>
+            <a href="sepet.html">sepet</a>
+        </nav>
+    
+
+    <main>
+        <div class="cart-content" id="cart-content">
+            <!-- Sepet içeriği burada listelenecek -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Diyar Oyun. Tüm hakları saklıdır.</p>
+        <p>İletişim: info@diyaroyun.com</p>
+    </footer>
+
+    <script>
+        // Sepet içeriğini temsil eden bir JavaScript nesnesi
+        const cartItems = [
+            { id: 1, name: "Ürün Adı 1", price: 19.99, image: "resim1.jpg" },
+            { id: 2, name: "Ürün Adı 2", price: 29.99, image: "resim2.jpg" },
+            { id: 3, name: "Ürün Adı 3", price: 39.99, image: "resim2.jpg" }
+        ];
+
+        // Sepet içeriğini görüntüleyen fonksiyon
+        function displayCart() {
+            const cartContent = document.getElementById("cart-content");
+            cartContent.innerHTML = "";
+
+            if (cartItems.length === 0) {
+                cartContent.innerHTML = "<p>Sepetiniz boş.</p>";
+            } else {
+                cartItems.forEach(item => {
+                    const cartItemDiv = document.createElement("div");
+                    cartItemDiv.classList.add("cart-item");
+
+                    const img = document.createElement("img");
+                    img.src = item.image;
+                    img.alt = item.name;
+
+                    const itemDetails = document.createElement("div");
+                    itemDetails.innerHTML = `<h3>${item.name}</h3><p>Fiyat: $${item.price.toFixed(2)}</p>`;
+
+                    const removeButton = document.createElement("button");
+                    removeButton.textContent = "Ürünü Kaldır";
+                    removeButton.addEventListener("click", () => removeFromCart(item.id));
+
+                    cartItemDiv.appendChild(img);
+                    cartItemDiv.appendChild(itemDetails);
+                    cartItemDiv.appendChild(removeButton);
+
+                    cartContent.appendChild(cartItemDiv);
+                });
+            }
+        }
+
+        // Sepete ürün ekleyen fonksiyon
+        function addToCart(productId) {
+            const productToAdd = getProductById(productId);
+            if (productToAdd) {
+                cartItems.push(productToAdd);
+                displayCart();
+            }
+        }
+
+        // Sepetten ürün çıkaran fonksiyon
+        function removeFromCart(productId) {
+            const indexToRemove = cartItems.findIndex(item => item.id === productId);
+            if (indexToRemove !== -1) {
+                cartItems.splice(indexToRemove, 1);
+                displayCart();
+            }
+        }
+
+        // Ürün ID'sine göre ürünü getiren fonksiyon
+        function getProductById(productId) {
+            return cartItems.find(item => item.id === productId);
+        }
+
+        // Sayfa yüklendiğinde sepeti göster
+        displayCart();
+    </script>
+</body>
+</html>

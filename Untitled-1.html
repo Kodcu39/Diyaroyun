@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diyar Oyun</title>
+    <style>
+        /* Temel stil ayarları */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            background-color: #04066a;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            
+        }
+
+        /* Header stil ayarları */
+        header {
+            background-color: rgba(0, 0, 0, 0.1); /* Saydamlığı azalt */
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease; /* Geçiş efekti ekle */
+}
+        /* Menü stil ayarları */
+            nav {
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: none;
+            align-items: center;
+            height: 100%;
+
+        }
+
+        nav a {
+            color: #000000;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 10px;
+        }
+        nav h1 {
+            margin: 0;
+            text-align:right;
+            font-size: 48px;
+            text-shadow:rgba(251, 251, 251, 0.5); /* Gölgelendirme efekti */
+            animation: shake 0.8s ease-in-out infinite; /* Titreme animasyonu */
+        }
+
+            nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            justify-content: right; /* Yazıları ortala */
+            align-items: center; /* Menü öğelerini dikey ortala */
+            height: 100%; /* Menü yüksekliği eşitlensin */
+        }
+
+        nav ul li {
+            margin-right: 7px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-right: 20px;
+        }
+        nav ul li a {
+         color: #fff;
+            text-decoration: none;
+            display: flex;
+            padding: 5px;
+            border-radius: 15px;
+            align-items: right; /* Menü öğelerini dikey ortala */
+            height: 100%; /* Menü yüksekliği eşitlensin */
+         }
+         /* Logo stil ayarları */
+        nav img {
+            height: 85px; /* Logo yüksekliği */
+            margin-right: 10px; /* Logodan menüye olan boşluk */
+        }
+         /* Menu Toggle Button Stili */
+         .menu-toggle {
+            display: none; /* Küçük ekranlar için varsayılan olarak gizle */
+            cursor: pointer;
+            font-size: 24px;
+        }
+                /* Çanta simgesi için stil */
+                .cart-icon {
+            font-size: 36px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+          /* Küçük ekranlarda görünen menü ve logo */
+          @media only screen and (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 10px;
+            }
+
+            nav ul, nav.open ul {
+                display: none;
+            }
+
+            nav.open ul {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            /* Mobil uyumlu logo stil ayarları */
+            nav h1 {
+                font-size: 20px;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            /* Mobil uyumlu çanta simgesi stil ayarları */
+            .cart-icon {
+                margin-left: auto;
+            }
+            }
+              /* Titreme animasyonu */
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-5px);
+            }
+        }
+            /* Popüler ürün stil ayarları */
+        .popular-product {
+            color: #000; /* Siyah renk */
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+         /* Saydam (şeffaf) menü stil ayarları */
+         .transparent-menu {
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Saydam (şeffaf) menü stilini değiştirme */
+        .scrolled {
+            background-color: rgba(35, 41, 212, 0.7);
+        }
+
+        nav a {
+            color: #050505;
+            text-decoration: none;}
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* İçerik stil ayarları */
+        main {
+            flex: 1;
+            text-align: center;
+            color: #fff; /* Yazı rengi */
+            padding: 80px 20px 20px 20px; /* Header alanının üzerine gelen içerik için padding */
+        }
+         /* Ürün kutusu stil ayarları */
+         .product-container {
+            display: flex;
+            flex-wrap: wrap; /* Ekran küçüldükçe ürünleri yeni satıra al */
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .product-box {
+            flex: 0% 25% 25%; /* Kutuların genişliği (%20) */
+            background-color: #200033;
+            padding: 10px;
+            margin: 0 10px;
+            border-radius: 25px;
+            border-inline-end: #005D7A;
+            text-align: center;
+        }
+
+        /* Resmin üzerine gelindiğinde opaklık efekti */
+        .product-box img:hover {
+            opacity: 0.8;
+            transition: opacity 0.3s ease-in-out;
+            background-color: #200033; /* Renk değişimi */
+        }
+
+        /* Kategori butonu stil ayarları */
+        .category-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .buy-button {
+            background-color: #008CBA;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .buy-button:hover {
+            background-color: #005D7A;
+            box-shadow: 0 4px 8px rgba(0, 140, 186, 0.5); /* Gölge efekti */
+        }
+              /* Sepete Ekle butonu stil ayarları */
+        .add-to-cart-button {
+            background-color: #a8af4c;
+            color: #e40606;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #45a049;
+        }
+          /* Ürün detay linki stil ayarları */
+          .product-box a {
+            color: #fff; /* Beyaz renk */
+            text-decoration: none;
+            transition: color 0.3s ease; /* Renk değişim efekti */
+          }
+        .product-box a:hover {
+            color: #0D47A1; }/* Renk değişimi */
+         /* Footer stil ayarları */
+         footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto; /* Footer'ı en alta sabitleme */
+        }
+        .slider-container {
+            width: 70%;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            height: 350px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 5.0s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Slider düğmeleri için stiller */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: 25px;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* Slider düğmelerinin üzerine gelindiğinde renk değişikliği */
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    </style>
+</head>
+<body>    
+  <header>
+    <nav id="main-menu" class="transparent-menu">
+        <H1><img src="Logo.jpg" alt="Logo"></H1> <!-- Logo ekleyin -->
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <ul>   
+            <li><a href="Untitled-1.html">Diyar Oyun</a>
+        <li><a href="Ürünler.html">Kategoriler</a>
+        <li><a href="sepet.html">Sepet</a>
+      </ul>
+      <div class="cart-icon" onclick="toggleCart()">🛍️<span id="cart-count">0</span></div>
+   </nav>
+</header>
+<script>
+    function toggleMenu() {
+        var nav = document.querySelector('nav');
+        nav.classList.toggle('open');
+    }
+</script>
+
+        <main>            
+            <div class="content-box">
+            <main>
+                <div class="slider-container">
+                    <div class="slider">
+                        <div class="slide">
+                            <img src="pubg.jpg" alt="Slide 1">
+                        </div>
+                        <div class="slide">
+                            <img src="kapal2.jpg" alt="Slide 2">
+                        </div>
+                        <div class="slide">
+                            <img src="kapak.jpg" alt="Slide 3">
+                        </div>
+                        <div class="slide">
+                            <img src="kapak2.png" alt="Slide 4">
+                        </div>
+                    </div>
+            
+                    <!-- Slider düğmeleri -->
+                    <div class="prev" onclick="prevSlide()">&#10094;</div>
+                    <div class="next" onclick="nextSlide()">&#10095;</div>
+                </div>
+
+                <!--*****************************************************************-->
+
+               <nav> <h1>Popüler Ürünler</h1> </nav>     
+                <!-- Ürün kutuları -->
+                <div class="product-container">
+
+                    <div class="product-box">
+                        <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                        <h3>Ürün Adı 2</h3>
+                        <p>Fiyat: $29.99</p>
+                        <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                        <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                    </div>  
+                    <div class="product-box">
+                        <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                        <h3>Ürün Adı 2</h3>
+                        <p>Fiyat: $29.99</p>
+                        <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                        <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                </div>
+                <div class="product-box">
+                    <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                    <h3 color="white">Ürün Adı 2</h3>
+                    <p>Fiyat: $29.99</p>
+                    <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                    <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                </div>  
+                <div class="product-box">
+                    <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                    <h3>Ürün Adı 2</h3>
+                    <p>Fiyat: $29.99</p>
+                    <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                    <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+            </div>
+            <div class="product-box" id="product-1">
+                <a href="Ateş kasası.html">
+                <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                <h3>Ürün Adı 2</h3>
+                <p>Fiyat: $00.99</p>
+                <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+            </div>  
+                </div> 
+                    <!-- ------------------------------------------------------------------------------------------------ -->
+                <div class="product-container">
+
+                    <div class="product-box">
+                        <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                        <h3>Ürün Adı 2</h3>
+                        <p>Fiyat: $29.99</p>
+                        <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                        <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                    </div>  
+                    <div class="product-box">
+                        <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                        <h3>Ürün Adı 2</h3>
+                        <p>Fiyat: $29.99</p>
+                        <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                        <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                </div>
+                <div class="product-box">
+                    <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                    <h3>Ürün Adı 2</h3>
+                    <p>Fiyat: $29.99</p>
+                    <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                    <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+                </div>  
+                <div class="product-box">
+                    <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                    <h3>Ürün Adı 2</h3>
+                    <p>Fiyat: $29.99</p>
+                    <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                    <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+            </div>
+            <div class="product-box">
+                <img src="c1234466150394117337114732.png" alt="Ürün 2" width="200" height="150">
+                <h3>Ürün Adı 2</h3>
+                <p>Fiyat: $29.99</p>
+                <a href="Ateş kasası.html" class="buy-button">Satın Al</a>
+                <a href="sepet.html" class="add-to-cart-button" onclick="addToCart(3)">Sepete Ekle</a>   
+            </div>  
+         </main>
+        <script>
+            var slideIndex = 0;
+
+function showSlides() {
+    var slides = document.querySelectorAll('.slide');
+    
+    // Tüm slaytları gizle
+    for (var i = 0; i < slides.length; i++) {
+        slides[i].style.display = 'none';
+    }
+
+    // Bir sonraki slayta geç
+    slideIndex++;
+
+    // Eğer son slayta ulaşıldıysa başa dön
+    if (slideIndex >= slides.length) {
+        slideIndex = 0;
+    }
+
+    // Şu anki slaytı göster
+    slides[slideIndex].style.display = 'block';
+
+    // 3 saniye sonra bir sonraki slayta geç
+    setTimeout(showSlides, 3000);
+}
+
+// İlk çalıştırmada slayt gösterimini başlat
+showSlides();
+
+function nextSlide() {
+    var slides = document.querySelectorAll('.slide');
+    // Bir sonraki slayta geç
+    slideIndex++;
+    // Eğer son slayta ulaşıldıysa başa dön
+    if (slideIndex >= slides.length) {
+        slideIndex = 0;
+    }
+    // Belirtilen slaytı göster
+    showSlide(slideIndex);
+}
+
+function prevSlide() {
+    var slides = document.querySelectorAll('.slide');
+    // Bir önceki slayta geç
+    slideIndex--;
+    // Eğer ilk slayta ulaşıldıysa sona dön
+    if (slideIndex < 0) {
+        slideIndex = slides.length - 1;
+    }
+    // Belirtilen slaytı göster
+    showSlide(slideIndex);
+}
+
+function showSlide(index) {
+    var slides = document.querySelectorAll('.slide');
+    // Tüm slaytları gizle
+    for (var i = 0; i < slides.length; i++) {
+        slides[i].style.display = 'none';
+    }
+    // Belirtilen slaytı göster
+    slides[index].style.display = 'block';
+}
+  
+        // Ürün detay sayfasına yönlendiren fonksiyon
+        function goToProductPage(productId) {
+            // Gerçek bir uygulamada, bu kısmı isteğinize göre düzenleyebilirsiniz.
+            alert("Ürün detay sayfasına yönlendirme. Ürün ID: " + productId);
+            // Burada window.location.href veya başka bir yönlendirme yöntemi kullanabilirsiniz.
+        }
+        window.addEventListener('scroll', function () {
+            var header = document.getElementById('main-menu');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+
+        </script>
+            <!-- Sayfa içeriği buraya gelebilir -->
+
+          <script>
+            function toggleMenu() {
+                var nav = document.querySelector('nav');
+                nav.classList.toggle('open');
+            }
+    
+            function toggleCart() {
+                // Sepetin açılma/kapanma işlemleri burada yapılabilir
+                // Örneğin, bir modal pencere gösterilebilir.
+            }
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2023 Diyar Oyun. Tüm hakları saklıdır.</p>
+        <p>İletişim: info@diyaroyun.com</p>
+    </footer>
+</body>
+</html>
